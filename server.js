@@ -10,6 +10,7 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var request = require("request");
 var cheerio = require("cheerio");
+var mongojs = require("mongojs");
 
 var article = require("./models/article.js");
 var save = require("./models/notes.js");
@@ -21,23 +22,25 @@ mongoose.Promise = Promise;
 var app = express();
 var PORT = process.env.PORT || 3000;
 
-
-
 // Configure the public static directory
 app.use(express.static("public"));
 
 //establish connection the the db
+// Database configuration
+var databaseUrl = "articlesdb";
+var collections = ["articledata"];
+
 mongoose.connect("mongodb://localhost:/articlesdb");
 var db = mongoose.connection;
 
 // log any error with mongoose
 db.on("error", function(error) {
-    console.log(error);
+  console.log(error);
 });
 
 db.once("open", function() {
     console.log("Mongoose Connection is Successful!")
-});
+
 
 // Routes:
 //========
@@ -45,7 +48,6 @@ db.once("open", function() {
 require("./routes/html-routes.js")(app);
 require("./routes/app-routes.js")(app);
 
-
 app.listen(PORT, function() {
-    console.log("Application is listening on port: " + PORT);
+console.log("Application is listening on port: " + PORT);
 });
