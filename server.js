@@ -20,6 +20,13 @@ mongoose.Promise = Promise;
 
 // Initialize Express
 var app = express();
+
+app.use(logger("dev"));
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
 var PORT = process.env.PORT || 3000;
 
 // Configure the public static directory
@@ -50,4 +57,5 @@ require("./routes/app-routes.js")(app);
 
 app.listen(PORT, function() {
 console.log("Application is listening on port: " + PORT);
+});
 });
